@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.codehaus.plexus.interpolation.util.StringUtils;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <b>NOTE:</b> This class was copied from plexus-utils, to allow this library to stand completely self-contained.
@@ -42,7 +43,7 @@ public class ReflectionValueExtractor {
      * space overflows due to retention of discarded classloaders.
      */
     private static final Map<Class<?>, WeakReference<ClassMap>> classMaps =
-            new WeakHashMap<Class<?>, WeakReference<ClassMap>>();
+            new WeakHashMap<>();
 
     static final int EOF = -1;
 
@@ -73,7 +74,7 @@ public class ReflectionValueExtractor {
             return idx < expression.length() ? expression.charAt(idx++) : EOF;
         }
 
-        public String nextToken(char delimiter) {
+        public @Nullable String nextToken(char delimiter) {
             int start = idx;
 
             while (idx < expression.length() && delimiter != expression.charAt(idx)) {
@@ -88,7 +89,7 @@ public class ReflectionValueExtractor {
             return expression.substring(start, idx++);
         }
 
-        public String nextPropertyName() {
+        public @Nullable String nextPropertyName() {
             final int start = idx;
 
             while (idx < expression.length() && Character.isJavaIdentifierPart(expression.charAt(idx))) {
@@ -133,7 +134,7 @@ public class ReflectionValueExtractor {
      * @return the object defined by the expression
      * @throws Exception if any
      */
-    public static Object evaluate(String expression, Object root) throws Exception {
+    public static @Nullable Object evaluate(String expression, Object root) throws Exception {
         return evaluate(expression, root, true);
     }
 
@@ -156,7 +157,7 @@ public class ReflectionValueExtractor {
      * @throws Exception if any
      */
     // TODO: don't throw Exception
-    public static Object evaluate(String expression, final Object root, final boolean trimRootToken) throws Exception {
+    public static @Nullable Object evaluate(String expression, final Object root, final boolean trimRootToken) throws Exception {
         Object value = root;
 
         // ----------------------------------------------------------------------
@@ -164,9 +165,9 @@ public class ReflectionValueExtractor {
         // MavenProject instance.
         // ----------------------------------------------------------------------
 
-        if (expression == null
-                || "".equals(expression.trim())
-                || !Character.isJavaIdentifierStart(expression.charAt(0))) {
+        if (expression == null ||
+                "".equals(expression.trim()) ||
+                !Character.isJavaIdentifierStart(expression.charAt(0))) {
             return null;
         }
 

@@ -38,13 +38,13 @@ public class MultiDelimiterStringSearchInterpolator implements Interpolator {
 
     private Map existingAnswers = new HashMap();
 
-    private List<ValueSource> valueSources = new ArrayList<ValueSource>();
+    private List<ValueSource> valueSources = new ArrayList<>();
 
     private List postProcessors = new ArrayList();
 
     private boolean cacheAnswers = false;
 
-    private LinkedHashSet<DelimiterSpecification> delimiters = new LinkedHashSet<DelimiterSpecification>();
+    private LinkedHashSet<DelimiterSpecification> delimiters = new LinkedHashSet<>();
 
     private String escapeString;
 
@@ -80,6 +80,7 @@ public class MultiDelimiterStringSearchInterpolator implements Interpolator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addValueSource(ValueSource valueSource) {
         valueSources.add(valueSource);
     }
@@ -87,6 +88,7 @@ public class MultiDelimiterStringSearchInterpolator implements Interpolator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeValuesSource(ValueSource valueSource) {
         valueSources.remove(valueSource);
     }
@@ -94,6 +96,7 @@ public class MultiDelimiterStringSearchInterpolator implements Interpolator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addPostProcessor(InterpolationPostProcessor postProcessor) {
         postProcessors.add(postProcessor);
     }
@@ -101,19 +104,23 @@ public class MultiDelimiterStringSearchInterpolator implements Interpolator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removePostProcessor(InterpolationPostProcessor postProcessor) {
         postProcessors.remove(postProcessor);
     }
 
+    @Override
     public String interpolate(String input, String thisPrefixPattern) throws InterpolationException {
         return interpolate(input, new SimpleRecursionInterceptor());
     }
 
+    @Override
     public String interpolate(String input, String thisPrefixPattern, RecursionInterceptor recursionInterceptor)
             throws InterpolationException {
         return interpolate(input, recursionInterceptor);
     }
 
+    @Override
     public String interpolate(String input) throws InterpolationException {
         return interpolate(input, new SimpleRecursionInterceptor());
     }
@@ -123,6 +130,7 @@ public class MultiDelimiterStringSearchInterpolator implements Interpolator {
      *
      * TODO: Ensure unresolvable expressions don't trigger infinite recursion.
      */
+    @Override
     public String interpolate(String input, RecursionInterceptor recursionInterceptor) throws InterpolationException {
         try {
             return interpolate(input, recursionInterceptor, new HashSet());
@@ -173,7 +181,7 @@ public class MultiDelimiterStringSearchInterpolator implements Interpolator {
                     int startEscapeIdx = (startIdx == 0) ? 0 : startIdx - escapeString.length();
                     if (startEscapeIdx >= 0) {
                         String escape = input.substring(startEscapeIdx, startIdx);
-                        if (escape != null && escapeString.equals(escape)) {
+                        if (escapeString.equals(escape)) {
                             result.append(wholeExpr);
                             if (startEscapeIdx > 0) {
                                 --startEscapeIdx;
@@ -291,6 +299,7 @@ public class MultiDelimiterStringSearchInterpolator implements Interpolator {
      *
      * @return a {@link List} that may be interspersed with {@link String} and {@link Throwable} instances.
      */
+    @Override
     public List getFeedback() {
         List messages = new ArrayList();
         for (ValueSource vs : valueSources) {
@@ -306,20 +315,24 @@ public class MultiDelimiterStringSearchInterpolator implements Interpolator {
     /**
      * Clear the feedback messages from previous interpolate(..) calls.
      */
+    @Override
     public void clearFeedback() {
         for (ValueSource vs : valueSources) {
             vs.clearFeedback();
         }
     }
 
+    @Override
     public boolean isCacheAnswers() {
         return cacheAnswers;
     }
 
+    @Override
     public void setCacheAnswers(boolean cacheAnswers) {
         this.cacheAnswers = cacheAnswers;
     }
 
+    @Override
     public void clearAnswers() {
         existingAnswers.clear();
     }

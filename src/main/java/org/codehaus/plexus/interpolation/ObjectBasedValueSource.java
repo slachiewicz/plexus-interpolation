@@ -17,6 +17,7 @@ package org.codehaus.plexus.interpolation;
  */
 
 import org.codehaus.plexus.interpolation.reflection.ReflectionValueExtractor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Wraps an object, providing reflective access to the object graph of which the
@@ -49,7 +50,8 @@ public class ObjectBasedValueSource extends AbstractValueSource {
      * <p><b>NOTE:</b> The object-graph nagivation actually takes place via the
      * {@link ReflectionValueExtractor} class.</p>
      */
-    public Object getValue(String expression) {
+    @Override
+    public @Nullable Object getValue(String expression) {
         if (expression == null || expression.trim().length() < 1) {
             return null;
         }

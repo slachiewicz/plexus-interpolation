@@ -36,7 +36,7 @@ public class PrefixAwareRecursionInterceptor implements RecursionInterceptor {
 
     public static final String DEFAULT_END_TOKEN = "\\}";
 
-    private Stack<String> nakedExpressions = new Stack<String>();
+    private Stack<String> nakedExpressions = new Stack<>();
 
     private final String[] possiblePrefixes;
 
@@ -64,15 +64,18 @@ public class PrefixAwareRecursionInterceptor implements RecursionInterceptor {
         this.possiblePrefixes = possiblePrefixes.toArray(new String[possiblePrefixes.size()]);
     }
 
+    @Override
     public boolean hasRecursiveExpression(String expression) {
         String realExpr = ValueSourceUtils.trimPrefix(expression, possiblePrefixes, watchUnprefixedExpressions);
         return realExpr != null && nakedExpressions.contains(realExpr);
     }
 
+    @Override
     public void expressionResolutionFinished(String expression) {
         nakedExpressions.pop();
     }
 
+    @Override
     public void expressionResolutionStarted(String expression) {
         String realExpr = ValueSourceUtils.trimPrefix(expression, possiblePrefixes, watchUnprefixedExpressions);
         nakedExpressions.push(realExpr);
@@ -86,6 +89,7 @@ public class PrefixAwareRecursionInterceptor implements RecursionInterceptor {
      * prefix from this interceptor's list, and unprefixed expressions aren't allowed
      * then return {@link Collections#EMPTY_LIST}.
      */
+    @Override
     public List getExpressionCycle(String expression) {
         String expr = ValueSourceUtils.trimPrefix(expression, possiblePrefixes, watchUnprefixedExpressions);
 
@@ -96,11 +100,11 @@ public class PrefixAwareRecursionInterceptor implements RecursionInterceptor {
         int idx = nakedExpressions.indexOf(expr);
         if (idx < 0) {
             return Collections.EMPTY_LIST;
-        } else {
-            return nakedExpressions.subList(idx, nakedExpressions.size());
         }
+        return nakedExpressions.subList(idx, nakedExpressions.size());
     }
 
+    @Override
     public void clear() {
         nakedExpressions.clear();
     }

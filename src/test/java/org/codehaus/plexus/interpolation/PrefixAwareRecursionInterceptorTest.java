@@ -17,10 +17,10 @@ package org.codehaus.plexus.interpolation;
  */
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
+import static java.util.Collections.singleton;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,7 +30,7 @@ class PrefixAwareRecursionInterceptorTest {
     @Test
     void findExpression() {
         PrefixAwareRecursionInterceptor receptor =
-                new PrefixAwareRecursionInterceptor(Collections.singleton("prefix."));
+                new PrefixAwareRecursionInterceptor(singleton("prefix."));
 
         String expr = "prefix.first";
 

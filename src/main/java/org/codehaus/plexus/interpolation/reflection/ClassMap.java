@@ -22,6 +22,8 @@ import java.lang.reflect.Modifier;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * <b>NOTE:</b> This class was copied from plexus-utils, to allow this library
  * to stand completely self-contained.
@@ -50,7 +52,7 @@ public class ClassMap {
      * Cache of Methods, or CACHE_MISS, keyed by method
      * name and actual arguments used to find it.
      */
-    private Map<String, Object> methodCache = new Hashtable<String, Object>();
+    private Map<String, Object> methodCache = new Hashtable<>();
 
     private MethodMap methodMap = new MethodMap();
 
@@ -84,7 +86,7 @@ public class ClassMap {
      * @return {@link Method}.
      * @throws MethodMap.AmbiguousException in case of an error.
      */
-    public Method findMethod(String name, Object[] params) throws MethodMap.AmbiguousException {
+    public @Nullable Method findMethod(String name, Object[] params) throws MethodMap.AmbiguousException {
         String methodKey = makeMethodKey(name, params);
         Object cacheEntry = methodCache.get(methodKey);
 

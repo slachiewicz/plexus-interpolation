@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.codehaus.plexus.interpolation.util.ValueSourceUtils;
+import org.jspecify.annotations.Nullable;
 
 /**
  * {@link ValueSource} implementation which simply wraps another value source,
@@ -110,7 +111,8 @@ public class PrefixedValueSourceWrapper implements FeedbackEnabledValueSource, Q
      * expressions are not allowed here), then return null; otherwise, return the
      * nested {@link ValueSource#getValue(String)} result.
      */
-    public Object getValue(String expression) {
+    @Override
+    public @Nullable Object getValue(String expression) {
         lastExpression = ValueSourceUtils.trimPrefix(expression, possiblePrefixes, allowUnprefixedExpressions);
 
         if (lastExpression == null) {
@@ -124,6 +126,7 @@ public class PrefixedValueSourceWrapper implements FeedbackEnabledValueSource, Q
      * If the nested {@link ValueSource} implements {@link FeedbackEnabledValueSource},
      * then return that source's feedback list. Otherwise, return {@link Collections#EMPTY_LIST}.
      */
+    @Override
     public List getFeedback() {
         return (valueSource instanceof FeedbackEnabledValueSource) ? valueSource.getFeedback() : Collections.EMPTY_LIST;
     }
@@ -133,16 +136,18 @@ public class PrefixedValueSourceWrapper implements FeedbackEnabledValueSource, Q
      * then return that source's last expression. Otherwise, return the last expression
      * that was processed by the wrapper itself.
      */
+    @Override
     public String getLastExpression() {
-        return (valueSource instanceof QueryEnabledValueSource)
-                ? ((QueryEnabledValueSource) valueSource).getLastExpression()
-                : lastExpression;
+        return (valueSource instanceof QueryEnabledValueSource) ?
+                ((QueryEnabledValueSource) valueSource).getLastExpression() :
+                lastExpression;
     }
 
     /**
      * If the nested {@link ValueSource} implements {@link FeedbackEnabledValueSource},
      * then clear that source's feedback list.
      */
+    @Override
     public void clearFeedback() {
         valueSource.clearFeedback();
     }

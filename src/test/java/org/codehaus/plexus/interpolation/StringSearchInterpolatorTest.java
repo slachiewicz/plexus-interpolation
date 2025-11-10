@@ -371,21 +371,23 @@ public class StringSearchInterpolatorTest {
         RecursionInterceptor recursionInterceptor = new SimpleRecursionInterceptor();
         final boolean[] error = new boolean[] {false};
         interpolator.addValueSource(new ValueSource() {
+            @Override
             public Object getValue(String expression) {
-                if (expression.equals("key")) {
+                if ("key".equals(expression)) {
                     if (error[0]) {
                         throw new IllegalStateException("broken");
                     }
                     return "val";
-                } else {
-                    return null;
                 }
+                return null;
             }
 
+            @Override
             public List getFeedback() {
                 return Collections.EMPTY_LIST;
             }
 
+            @Override
             public void clearFeedback() {}
         });
         assertEquals("-val-", interpolator.interpolate("-${key}-", recursionInterceptor), "control case");

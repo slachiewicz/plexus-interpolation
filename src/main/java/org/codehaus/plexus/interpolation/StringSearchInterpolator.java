@@ -25,11 +25,11 @@ import java.util.Set;
 
 public class StringSearchInterpolator implements Interpolator {
 
-    private Map<String, Object> existingAnswers = new HashMap<String, Object>();
+    private Map<String, Object> existingAnswers = new HashMap<>();
 
-    private List<ValueSource> valueSources = new ArrayList<ValueSource>();
+    private List<ValueSource> valueSources = new ArrayList<>();
 
-    private List<InterpolationPostProcessor> postProcessors = new ArrayList<InterpolationPostProcessor>();
+    private List<InterpolationPostProcessor> postProcessors = new ArrayList<>();
 
     private boolean cacheAnswers = false;
 
@@ -56,6 +56,7 @@ public class StringSearchInterpolator implements Interpolator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addValueSource(ValueSource valueSource) {
         valueSources.add(valueSource);
     }
@@ -63,6 +64,7 @@ public class StringSearchInterpolator implements Interpolator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeValuesSource(ValueSource valueSource) {
         valueSources.remove(valueSource);
     }
@@ -70,6 +72,7 @@ public class StringSearchInterpolator implements Interpolator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addPostProcessor(InterpolationPostProcessor postProcessor) {
         postProcessors.add(postProcessor);
     }
@@ -77,19 +80,23 @@ public class StringSearchInterpolator implements Interpolator {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removePostProcessor(InterpolationPostProcessor postProcessor) {
         postProcessors.remove(postProcessor);
     }
 
+    @Override
     public String interpolate(String input, String thisPrefixPattern) throws InterpolationException {
         return interpolate(input, new SimpleRecursionInterceptor());
     }
 
+    @Override
     public String interpolate(String input, String thisPrefixPattern, RecursionInterceptor recursionInterceptor)
             throws InterpolationException {
         return interpolate(input, recursionInterceptor);
     }
 
+    @Override
     public String interpolate(String input) throws InterpolationException {
         return interpolate(input, new SimpleRecursionInterceptor());
     }
@@ -100,9 +107,10 @@ public class StringSearchInterpolator implements Interpolator {
      *
      * TODO: Ensure unresolvable expressions don't trigger infinite recursion.
      */
+    @Override
     public String interpolate(String input, RecursionInterceptor recursionInterceptor) throws InterpolationException {
         try {
-            return interpolate(input, recursionInterceptor, new HashSet<String>());
+            return interpolate(input, recursionInterceptor, new HashSet<>());
         } finally {
             if (!cacheAnswers) {
                 existingAnswers.clear();
@@ -225,9 +233,8 @@ public class StringSearchInterpolator implements Interpolator {
             }
 
             return result.toString();
-        } else {
-            return input;
         }
+        return input;
     }
 
     /**
@@ -239,6 +246,7 @@ public class StringSearchInterpolator implements Interpolator {
      * @return a {@link List} that may be interspersed with {@link String} and
      *         {@link Throwable} instances.
      */
+    @Override
     public List getFeedback() {
         List<?> messages = new ArrayList();
         for (ValueSource vs : valueSources) {
@@ -254,20 +262,24 @@ public class StringSearchInterpolator implements Interpolator {
     /**
      * Clear the feedback messages from previous interpolate(..) calls.
      */
+    @Override
     public void clearFeedback() {
         for (ValueSource vs : valueSources) {
             vs.clearFeedback();
         }
     }
 
+    @Override
     public boolean isCacheAnswers() {
         return cacheAnswers;
     }
 
+    @Override
     public void setCacheAnswers(boolean cacheAnswers) {
         this.cacheAnswers = cacheAnswers;
     }
 
+    @Override
     public void clearAnswers() {
         existingAnswers.clear();
     }

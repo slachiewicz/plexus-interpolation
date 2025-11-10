@@ -18,6 +18,8 @@ package org.codehaus.plexus.interpolation.fixed;
 
 import java.util.Map;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * Wraps a Map, and looks up the whole expression as a single key, returning the
  * value mapped to it.
@@ -38,7 +40,8 @@ public class MapBasedValueSource implements FixedValueSource {
      * Lookup the supplied expression as a key in the wrapped Map, and return
      * its value.
      */
-    public Object getValue(String expression, InterpolationState interpolationState) {
+    @Override
+    public @Nullable Object getValue(String expression, InterpolationState interpolationState) {
         return values == null ? null : values.get(expression);
     }
 }

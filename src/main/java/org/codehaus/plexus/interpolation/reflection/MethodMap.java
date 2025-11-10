@@ -25,6 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * <b>NOTE:</b> This class was copied from plexus-utils, to allow this library
  * to stand completely self-contained.
@@ -42,7 +44,7 @@ public class MethodMap {
     /**
      * Keep track of all methods with the same name.
      */
-    Map<String, List<Method>> methodByNameMap = new Hashtable<String, List<Method>>();
+    Map<String, List<Method>> methodByNameMap = new Hashtable<>();
 
     /**
      * Add a method to a list of methods by name.
@@ -56,7 +58,7 @@ public class MethodMap {
         List<Method> l = get(methodName);
 
         if (l == null) {
-            l = new ArrayList<Method>();
+            l = new ArrayList<>();
             methodByNameMap.put(methodName, l);
         }
 
@@ -69,7 +71,7 @@ public class MethodMap {
      * @param key  the key
      * @return list of methods
      */
-    public List<Method> get(String key) {
+    public @Nullable List<Method> get(String key) {
         return methodByNameMap.get(key);
     }
 
@@ -101,7 +103,7 @@ public class MethodMap {
      *  @throws AmbiguousException if there is more than one maximally
      *  specific applicable method
      */
-    public Method find(String methodName, Object[] args) throws AmbiguousException {
+    public @Nullable Method find(String methodName, Object[] args) throws AmbiguousException {
         List<Method> methodList = get(methodName);
 
         if (methodList == null) {
@@ -147,7 +149,7 @@ public class MethodMap {
          * (the most specific method) otherwise we have ambiguity.
          */
 
-        LinkedList<Method> maximals = new LinkedList<Method>();
+        LinkedList<Method> maximals = new LinkedList<>();
 
         for (Method app : applicables) {
             Class<?>[] appArgs = app.getParameterTypes();
@@ -247,7 +249,7 @@ public class MethodMap {
      * to formal types through a method invocation conversion).
      */
     private static LinkedList<Method> getApplicables(List<Method> methods, Class<?>[] classes) {
-        LinkedList<Method> list = new LinkedList<Method>();
+        LinkedList<Method> list = new LinkedList<>();
 
         for (Method method : methods) {
             if (isApplicable(method, classes)) {
@@ -336,19 +338,19 @@ public class MethodMap {
                 return actual == Long.class || actual == Integer.class || actual == Short.class || actual == Byte.class;
             }
             if (formal == Float.TYPE) {
-                return actual == Float.class
-                        || actual == Long.class
-                        || actual == Integer.class
-                        || actual == Short.class
-                        || actual == Byte.class;
+                return actual == Float.class ||
+                        actual == Long.class ||
+                        actual == Integer.class ||
+                        actual == Short.class ||
+                        actual == Byte.class;
             }
             if (formal == Double.TYPE) {
-                return actual == Double.class
-                        || actual == Float.class
-                        || actual == Long.class
-                        || actual == Integer.class
-                        || actual == Short.class
-                        || actual == Byte.class;
+                return actual == Double.class ||
+                        actual == Float.class ||
+                        actual == Long.class ||
+                        actual == Integer.class ||
+                        actual == Short.class ||
+                        actual == Byte.class;
             }
         }
 
@@ -403,11 +405,11 @@ public class MethodMap {
                 return actual == Long.TYPE || actual == Integer.TYPE || actual == Short.TYPE || actual == Byte.TYPE;
             }
             if (formal == Double.TYPE) {
-                return actual == Float.TYPE
-                        || actual == Long.TYPE
-                        || actual == Integer.TYPE
-                        || actual == Short.TYPE
-                        || actual == Byte.TYPE;
+                return actual == Float.TYPE ||
+                        actual == Long.TYPE ||
+                        actual == Integer.TYPE ||
+                        actual == Short.TYPE ||
+                        actual == Byte.TYPE;
             }
         }
         return false;

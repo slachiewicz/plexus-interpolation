@@ -19,6 +19,7 @@ package org.codehaus.plexus.interpolation.util;
 import java.util.Collection;
 
 import org.codehaus.plexus.interpolation.ValueSource;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Utility methods shared by multiple {@link ValueSource} implementations.
@@ -44,7 +45,7 @@ public final class ValueSourceUtils {
      * @return The trimmed expression, or null. See the behavior of
      *         allowUnprefixedExpressions in this method for more detail.
      */
-    public static String trimPrefix(
+    public static @Nullable String trimPrefix(
             String expression, Collection<String> possiblePrefixes, boolean allowUnprefixedExpressions) {
         if (expression == null) {
             return null;
@@ -68,7 +69,7 @@ public final class ValueSourceUtils {
         return realExpr;
     }
 
-    public static String trimPrefix(String expression, String[] possiblePrefixes, boolean allowUnprefixedExpressions) {
+    public static @Nullable String trimPrefix(String expression, String[] possiblePrefixes, boolean allowUnprefixedExpressions) {
         if (expression == null) {
             return null;
         }

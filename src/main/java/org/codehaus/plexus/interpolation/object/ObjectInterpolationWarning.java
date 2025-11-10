@@ -57,20 +57,20 @@ public class ObjectInterpolationWarning {
         return cause;
     }
 
+    @Override
     public String toString() {
         if (cause == null) {
             return path + ": " + message;
-        } else {
-            StringWriter w = new StringWriter();
-            PrintWriter pw = new PrintWriter(w);
-
-            pw.print(path);
-            pw.print(": ");
-            pw.println(message);
-            pw.println("Cause: ");
-            cause.printStackTrace(pw);
-
-            return w.toString();
         }
+        StringWriter w = new StringWriter();
+        PrintWriter pw = new PrintWriter(w);
+
+        pw.print(path);
+        pw.print(": ");
+        pw.println(message);
+        pw.println("Cause: ");
+        cause.printStackTrace(pw);
+
+        return w.toString();
     }
 }

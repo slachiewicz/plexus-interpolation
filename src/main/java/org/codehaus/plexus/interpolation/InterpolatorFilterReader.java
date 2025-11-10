@@ -167,6 +167,7 @@ public class InterpolatorFilterReader extends FilterReader {
      * @exception IllegalArgumentException If <code>n</code> is negative.
      * @exception IOException If an I/O error occurs
      */
+    @Override
     public long skip(long n) throws IOException {
         if (n < 0L) {
             throw new IllegalArgumentException("skip value is negative");
@@ -190,15 +191,15 @@ public class InterpolatorFilterReader extends FilterReader {
      * @return the number of characters read, or -1 if the end of the stream has been reached
      * @exception IOException If an I/O error occurs
      */
+    @Override
     public int read(char cbuf[], int off, int len) throws IOException {
         for (int i = 0; i < len; i++) {
             int ch = read();
             if (ch == -1) {
                 if (i == 0) {
                     return -1;
-                } else {
-                    return i;
                 }
+                return i;
             }
             cbuf[off + i] = (char) ch;
         }
@@ -211,6 +212,7 @@ public class InterpolatorFilterReader extends FilterReader {
      * @return the next character in the resulting stream, or -1 if the end of the resulting stream has been reached
      * @exception IOException if the underlying stream throws an IOException during reading
      */
+    @Override
     public int read() throws IOException {
         if (replaceIndex != -1 && replaceIndex < replaceData.length()) {
             int ch = replaceData.charAt(replaceIndex++);
@@ -242,11 +244,11 @@ public class InterpolatorFilterReader extends FilterReader {
                 }
                 if (ch != -1) {
                     key.append((char) ch);
-                    if ((beginTokenMatchPos < this.beginToken.length())
-                            && (ch != this.beginToken.charAt(beginTokenMatchPos++))
-                            && (useEscape
-                                    && this.orginalBeginToken.length() > (beginTokenMatchPos - 1)
-                                    && ch != this.orginalBeginToken.charAt(beginTokenMatchPos - 1))) {
+                    if ((beginTokenMatchPos < this.beginToken.length()) &&
+                            (ch != this.beginToken.charAt(beginTokenMatchPos++)) &&
+                            (useEscape &&
+                                    this.orginalBeginToken.length() > (beginTokenMatchPos - 1) &&
+                                    ch != this.orginalBeginToken.charAt(beginTokenMatchPos - 1))) {
                         ch = -1; // not really EOF but to trigger code below
                         break;
                     }
@@ -255,9 +257,9 @@ public class InterpolatorFilterReader extends FilterReader {
                 }
                 // MSHARED-81 olamy : we must take care of token with length 1, escaping and same char : \@foo@
                 // here ch == endToken == beginToken -> not going to next char : bad :-)
-                if (useEscape
-                        && this.orginalBeginToken == this.endToken
-                        && key.toString().startsWith(this.beginToken)) {
+                if (useEscape &&
+                        this.orginalBeginToken == this.endToken &&
+                        key.toString().startsWith(this.beginToken)) {
                     ch = in.read();
                     key.append((char) ch);
                 }
@@ -331,12 +333,11 @@ public class InterpolatorFilterReader extends FilterReader {
                     replaceIndex = 0;
                 }
                 return read();
-            } else {
-                previousIndex = 0;
-                replaceData = key.substring(0, key.length() - this.endToken.length());
-                replaceIndex = 0;
-                return this.beginToken.charAt(0);
             }
+            previousIndex = 0;
+            replaceData = key.substring(0, key.length() - this.endToken.length());
+            replaceIndex = 0;
+            return this.beginToken.charAt(0);
         }
 
         return ch;

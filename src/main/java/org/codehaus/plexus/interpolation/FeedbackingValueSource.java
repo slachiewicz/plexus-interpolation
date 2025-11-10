@@ -1,5 +1,7 @@
 package org.codehaus.plexus.interpolation;
 
+import org.jspecify.annotations.Nullable;
+
 /*
  * Copyright 2001-2008 Codehaus Foundation.
  *
@@ -37,7 +39,7 @@ public class FeedbackingValueSource extends AbstractValueSource {
     }
 
     @Override
-    public Object getValue(String expression) {
+    public @Nullable Object getValue(String expression) {
         addFeedback(messagePattern.replace("${expression}", expression));
         return null;
     }

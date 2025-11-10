@@ -68,14 +68,15 @@ public final class DelimiterSpecification {
         return end;
     }
 
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((begin == null) ? 0 : begin.hashCode());
-        result = prime * result + ((end == null) ? 0 : end.hashCode());
-        return result;
+        return prime * result + ((end == null) ? 0 : end.hashCode());
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
@@ -90,6 +91,7 @@ public final class DelimiterSpecification {
         return true;
     }
 
+    @Override
     public String toString() {
         return "Interpolation delimiter [begin: '" + begin + "', end: '" + end + "']";
     }

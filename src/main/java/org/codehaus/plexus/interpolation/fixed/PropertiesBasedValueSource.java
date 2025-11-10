@@ -18,6 +18,8 @@ package org.codehaus.plexus.interpolation.fixed;
 
 import java.util.Properties;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * {@link org.codehaus.plexus.interpolation.fixed.FixedValueSource} implementation that wraps a {@link java.util.Properties} instance,
  * and does a simple lookup of the entire expression string as the parameter for
@@ -45,7 +47,8 @@ public class PropertiesBasedValueSource implements FixedValueSource {
      * entire expression as the key to lookup. If the wrapped properties instance
      * is null, simply return null.
      */
-    public Object getValue(String expression, InterpolationState interpolationState) {
+    @Override
+    public @Nullable Object getValue(String expression, InterpolationState interpolationState) {
         return properties == null ? null : properties.getProperty(expression);
     }
 }

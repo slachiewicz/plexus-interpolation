@@ -64,12 +64,11 @@ public class EnvarBasedValueSource implements FixedValueSource {
                 envarsCaseSensitive = OperatingSystemUtils.getSystemEnvVars(caseSensitive);
             }
             return envarsCaseSensitive;
-        } else {
-            if (envarsCaseInsensitive == null) {
-                envarsCaseInsensitive = OperatingSystemUtils.getSystemEnvVars(caseSensitive);
-            }
-            return envarsCaseInsensitive;
         }
+        if (envarsCaseInsensitive == null) {
+            envarsCaseInsensitive = OperatingSystemUtils.getSystemEnvVars(caseSensitive);
+        }
+        return envarsCaseInsensitive;
     }
 
     /**
@@ -81,6 +80,7 @@ public class EnvarBasedValueSource implements FixedValueSource {
      * @param expression envar expression, like 'HOME' or 'env.HOME'
      * @return the environment variable value for the given expression
      */
+    @Override
     public Object getValue(String expression, InterpolationState interpolationState) {
         String expr = expression;
 

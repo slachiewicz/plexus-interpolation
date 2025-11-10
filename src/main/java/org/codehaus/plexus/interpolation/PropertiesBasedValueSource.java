@@ -18,6 +18,8 @@ package org.codehaus.plexus.interpolation;
 
 import java.util.Properties;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * {@link ValueSource} implementation that wraps a {@link Properties} instance,
  * and does a simple lookup of the entire expression string as the parameter for
@@ -46,7 +48,8 @@ public class PropertiesBasedValueSource extends AbstractValueSource {
      * entire expression as the key to lookup. If the wrapped properties instance
      * is null, simply return null.
      */
-    public Object getValue(String expression) {
+    @Override
+    public @Nullable Object getValue(String expression) {
         return properties == null ? null : properties.getProperty(expression);
     }
 }

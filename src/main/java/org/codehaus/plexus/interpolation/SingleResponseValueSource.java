@@ -19,6 +19,8 @@ package org.codehaus.plexus.interpolation;
 import java.util.Collections;
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * If the expression matches, simply return the response object.
  * @since 1.12
@@ -33,13 +35,16 @@ public class SingleResponseValueSource implements ValueSource {
         this.response = response;
     }
 
+    @Override
     public void clearFeedback() {}
 
+    @Override
     public List getFeedback() {
         return Collections.EMPTY_LIST;
     }
 
-    public Object getValue(String expression) {
+    @Override
+    public @Nullable Object getValue(String expression) {
         if (this.expression.equals(expression)) {
             return response;
         }

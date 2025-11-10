@@ -19,6 +19,7 @@ package org.codehaus.plexus.interpolation.fixed;
 import java.util.List;
 
 import org.codehaus.plexus.interpolation.util.ValueSourceUtils;
+import org.jspecify.annotations.Nullable;
 
 /**
  * {@link org.codehaus.plexus.interpolation.fixed.FixedValueSource} implementation which simply wraps another
@@ -35,8 +36,6 @@ public class PrefixedValueSourceWrapper implements FixedValueSource {
     private final String[] possiblePrefixes;
 
     private boolean allowUnprefixedExpressions;
-
-    private String lastExpression;
 
     /**
      * Wrap the given value source, but first trim the given prefix from any
@@ -103,7 +102,8 @@ public class PrefixedValueSourceWrapper implements FixedValueSource {
         this.allowUnprefixedExpressions = allowUnprefixedExpressions;
     }
 
-    public Object getValue(String expression, InterpolationState interpolationState) {
+    @Override
+    public @Nullable Object getValue(String expression, InterpolationState interpolationState) {
         expression = ValueSourceUtils.trimPrefix(expression, possiblePrefixes, allowUnprefixedExpressions);
 
         if (expression == null) {

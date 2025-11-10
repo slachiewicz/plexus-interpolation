@@ -23,6 +23,7 @@ import org.codehaus.plexus.interpolation.BasicInterpolator;
 import org.codehaus.plexus.interpolation.InterpolationException;
 import org.codehaus.plexus.interpolation.InterpolationPostProcessor;
 import org.codehaus.plexus.interpolation.RecursionInterceptor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <p>
@@ -88,7 +89,7 @@ public class FixedStringSearchInterpolator implements FixedValueSource {
     }
 
     public static FixedStringSearchInterpolator createWithPermittedNulls(FixedValueSource... valueSources) {
-        List<FixedValueSource> nonnulls = new ArrayList<FixedValueSource>();
+        List<FixedValueSource> nonnulls = new ArrayList<>();
         for (FixedValueSource item : valueSources) {
             if (item != null) nonnulls.add(item);
         }
@@ -122,7 +123,8 @@ public class FixedStringSearchInterpolator implements FixedValueSource {
 
     // Find out how to return null when we cannot interpolate this expression
     // At this point we should always be a ${expr}
-    public Object getValue(String realExpr, InterpolationState interpolationState) {
+    @Override
+    public @Nullable Object getValue(String realExpr, InterpolationState interpolationState) {
 
         interpolationState.recursionInterceptor.expressionResolutionStarted(realExpr);
 
@@ -141,9 +143,8 @@ public class FixedStringSearchInterpolator implements FixedValueSource {
                     value = interpolationState.root.interpolate(String.valueOf(value), interpolationState);
                 }
                 return String.valueOf(value);
-            } else {
-                return null;
             }
+            return null;
         } finally {
             interpolationState.recursionInterceptor.expressionResolutionFinished(realExpr);
         }
@@ -153,10 +154,12 @@ public class FixedStringSearchInterpolator implements FixedValueSource {
         final InterpolationState is = new InterpolationState();
         return new BasicInterpolator() {
 
+            @Override
             public String interpolate(String input) throws InterpolationException {
                 return FixedStringSearchInterpolator.this.interpolate(input, is);
             }
 
+            @Override
             public String interpolate(String input, RecursionInterceptor recursionInterceptor)
                     throws InterpolationException {
                 is.setRecursionInterceptor(recursionInterceptor);

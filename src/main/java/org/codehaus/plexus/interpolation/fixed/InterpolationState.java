@@ -23,22 +23,23 @@ import java.util.Set;
 
 import org.codehaus.plexus.interpolation.RecursionInterceptor;
 import org.codehaus.plexus.interpolation.SimpleRecursionInterceptor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * AN error collector contains the errors accumulated during an interpolation.
  * It is stateful.
  */
 public class InterpolationState {
-    private final List<String> messages = new ArrayList<String>();
-    private final List<Throwable> causes = new ArrayList<Throwable>();
+    private final List<String> messages = new ArrayList<>();
+    private final List<Throwable> causes = new ArrayList<>();
 
     public void addFeedback(String message, Throwable cause) {
         messages.add(message);
         causes.add(cause);
     }
 
-    public List asList() {
-        ArrayList<Object> items = new ArrayList<Object>();
+    public @Nullable List asList() {
+        ArrayList<Object> items = new ArrayList<>();
         for (int i = 0; i < messages.size(); i++) {
             String msg = messages.get(i);
             if (msg != null) items.add(msg);
@@ -56,7 +57,7 @@ public class InterpolationState {
         root = null;
     }
 
-    final Set<String> unresolvable = new HashSet<String>();
+    final Set<String> unresolvable = new HashSet<>();
     RecursionInterceptor recursionInterceptor = new SimpleRecursionInterceptor();
 
     public void setRecursionInterceptor(RecursionInterceptor recursionInterceptor) {

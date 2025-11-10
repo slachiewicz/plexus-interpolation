@@ -17,7 +17,6 @@ package org.codehaus.plexus.interpolation.object;
  */
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +26,8 @@ import org.codehaus.plexus.interpolation.PropertiesBasedValueSource;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.junit.jupiter.api.Test;
 
+import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FieldBasedObjectInterpolatorTest {
@@ -84,7 +85,7 @@ class FieldBasedObjectInterpolatorTest {
 
         new FieldBasedObjectInterpolator().interpolate(obj, interpolator);
 
-        assertEquals("value", obj.values.get(0));
+        assertEquals("value", obj.values.getFirst());
         assertEquals("value2", obj.values.get(1));
     }
 
@@ -105,7 +106,7 @@ class FieldBasedObjectInterpolatorTest {
 
         new FieldBasedObjectInterpolator().interpolate(obj, interpolator);
 
-        assertEquals("key", obj.values.get(0));
+        assertEquals("key", obj.values.getFirst());
         assertEquals("value2", obj.values.get(1));
     }
 
@@ -115,7 +116,7 @@ class FieldBasedObjectInterpolatorTest {
         p.setProperty("key", "value");
         p.setProperty("key2", "value2");
 
-        List<String> values = Collections.singletonList("${key}");
+        List<String> values = singletonList("${key}");
 
         ObjectWithListField obj = new ObjectWithListField(values);
 
@@ -124,7 +125,7 @@ class FieldBasedObjectInterpolatorTest {
 
         new FieldBasedObjectInterpolator().interpolate(obj, interpolator);
 
-        assertEquals("${key}", obj.values.get(0));
+        assertEquals("${key}", obj.values.getFirst());
     }
 
     @Test
@@ -146,8 +147,8 @@ class FieldBasedObjectInterpolatorTest {
 
         new FieldBasedObjectInterpolator().interpolate(obj, interpolator);
 
-        assertEquals("value", ((String[]) obj.values.get(0))[0]);
-        assertEquals("value2", ((String[]) obj.values.get(0))[1]);
+        assertEquals("value", ((String[]) obj.values.getFirst())[0]);
+        assertEquals("value2", ((String[]) obj.values.getFirst())[1]);
         assertEquals("value3", ((String[]) obj.values.get(1))[0]);
         assertEquals("value4", ((String[]) obj.values.get(1))[1]);
     }
@@ -200,7 +201,7 @@ class FieldBasedObjectInterpolatorTest {
         p.setProperty("key", "value");
         p.setProperty("key2", "value2");
 
-        Map<String, String> values = Collections.singletonMap("key", "${key}");
+        Map<String, String> values = singletonMap("key", "${key}");
 
         ObjectWithMapField obj = new ObjectWithMapField(values);
 
